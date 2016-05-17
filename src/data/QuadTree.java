@@ -9,28 +9,28 @@ import java.util.List;
  * A utility QuadTree class used for efficiently loading chunks, and finding objects within them
  */
 
-public class QuadTree<T> {
+public class QuadTree<T extends HasKey> {
 
 	private Node root;
 	
-	public QuadTree(List<T> data, int levels) {
-		this(data, getNewRoot(), levels);
+	public QuadTree(List<T> data, TwoWayComparator k, int levels) {
+		this(data, new Node(k), levels);
 	}
 	
 	private QuadTree(List<T> data, Node r, int levels) {
 		root = r;
 		root.createChildren(levels - 1);
 		for (T t: data) {
-			root.add(t);
+			root.add(t, t.key());
 		}
 	}
 	
-	public Node getNewRoot() {
-		
-	}
+	/*public static Node getNewRoot(Key k) {
+		return new Node(k);
+	}*/
 	
 	//Do not expose Node intrinsics to usable QuadTree class
-	private class Node<T, K extends TwoWayComparator<K>> {
+	private static class Node<T, K extends TwoWayComparator<K>> {
 		public List<T> items;
 		private Node[] children;
 		public K key;
@@ -59,6 +59,13 @@ public class QuadTree<T> {
 		public List<T> get(K k) {
 			Node n = traverse(k);
 			return n == null ? null : n.items;
+		}
+		
+		public List<T> getAbsolute(K k) {
+			Node n = traverse(k);
+			if (n == null) return null;
+			if (n.key.equals(k)) return n.items;
+			return null;
 		}
 		
 		public Node traverse(K k) {
