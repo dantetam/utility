@@ -24,18 +24,35 @@ public class KMeans {
 		separatedPoints = sortPoints(data);
 	}
 	
+	private Point[] randomNMeans(List<Point> data) {
+		Point[] temp = new Point[nMeans.length];
+		for (int i = 0; i < nMeans.length; i++) {
+			temp[i] = new Point();
+		}
+	}
+	
 	private Point[] getNewCentroids(List<Point>[] separated) {
 		if (nMeans[0] == null) {
 			throw new RuntimeException("Should sort points first to generate nMeans");
 		}
-		
+		Point[] temp = new Point[nMeans.length];
+		for (int i = 0; i < nMeans.length; i++) {
+			Point avg = new Point();
+			avg.changeData(new double[nMeans[i].dim]);
+			for (int j = 0; j < separated[i].size(); j++) {
+				avg = avg.add(separated[i].get(j));
+			}
+			for (int j = 0; j < nMeans[i].dim; j++) {
+				avg = avg.scale(1D/(double)separated[i].size());
+			}
+			temp[i] = avg;
+		}
+		return temp;
 	}
 	
 	private List<Point>[] sortPoints(List<Point> points) {
 		if (nMeans[0] == null) {
-			for (int i = 0; i < nMeans.length; i++) {
-				nMeans[i] = new Point();
-			}
+			nMeans = randomNMeans();
 		}
 		List<Point>[] temp = (List<Point>[]) new Object[nMeans.length];
 		for (int i = 0; i < nMeans.length; i++) {
