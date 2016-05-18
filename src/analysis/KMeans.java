@@ -26,9 +26,17 @@ public class KMeans {
 	
 	private Point[] randomNMeans(List<Point> data) {
 		Point[] temp = new Point[nMeans.length];
+		double[][] minMax = Point.minMax(data);
+		double[] min = minMax[0], max = minMax[1];
 		for (int i = 0; i < nMeans.length; i++) {
 			temp[i] = new Point();
+			double[] newMean = new double[min.length];
+			for (int j = 0; j < min.length; j++) {
+				newMean[j] = min[j] + Math.random() * (max[j]-min[j]);
+			}
+			temp[i].changeData(newMean);
 		}
+		return temp;
 	}
 	
 	private Point[] getNewCentroids(List<Point>[] separated) {
@@ -42,9 +50,9 @@ public class KMeans {
 			for (int j = 0; j < separated[i].size(); j++) {
 				avg = avg.add(separated[i].get(j));
 			}
-			for (int j = 0; j < nMeans[i].dim; j++) {
-				avg = avg.scale(1D/(double)separated[i].size());
-			}
+			//for (int j = 0; j < nMeans[i].dim; j++) {
+			avg = avg.scale(1D/(double)separated[i].size());
+			//}
 			temp[i] = avg;
 		}
 		return temp;
@@ -52,7 +60,7 @@ public class KMeans {
 	
 	private List<Point>[] sortPoints(List<Point> points) {
 		if (nMeans[0] == null) {
-			nMeans = randomNMeans();
+			nMeans = randomNMeans(points);
 		}
 		List<Point>[] temp = (List<Point>[]) new Object[nMeans.length];
 		for (int i = 0; i < nMeans.length; i++) {
