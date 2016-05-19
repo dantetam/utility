@@ -45,14 +45,7 @@ public class KMeans {
 		}
 		Point[] temp = new Point[nMeans.length];
 		for (int i = 0; i < nMeans.length; i++) {
-			Point avg = new Point();
-			avg.changeData(new double[nMeans[i].dim]);
-			for (int j = 0; j < separated[i].size(); j++) {
-				avg = avg.add(separated[i].get(j));
-			}
-			//for (int j = 0; j < nMeans[i].dim; j++) {
-			avg = avg.scale(1D/(double)separated[i].size());
-			//}
+			Point avg = Point.combine(separated[i]);
 			temp[i] = avg;
 		}
 		return temp;
