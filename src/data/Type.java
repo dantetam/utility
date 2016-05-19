@@ -21,4 +21,17 @@ public class Type {
 		return typeField.hashCode() + colorRep.hashCode();
 	}
 	
+	public static Type randomType() {
+		Color c = new Color(
+				(float)Math.random(),
+				(float)Math.random(),
+				(float)Math.random()
+				);
+		String str = "";
+		for (int i = 0; i < ((int)(Math.random()*15)); i++) {
+			str += (char) 97 + ((int)(Math.random()*26));
+		}
+		return new Type(str, c);
+	}
+	
 }

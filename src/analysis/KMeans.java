@@ -16,15 +16,29 @@ public class KMeans {
 
 	public Point[] nMeans;
 	public List<Point>[] separatedPoints;
-	
+	public Point[][] record;
+
 	public KMeans(List<Point> data, int initialMeans, int iterations) {
 		if (initialMeans <= 0) {
 			throw new IllegalArgumentException("Cannot sort points into less than 1 mean");
 		}
 		nMeans = new Point[initialMeans];
 		separatedPoints = sortPoints(data);
+		nMeans = randomNMeans(data, nMeans.length);
+		runIterations(data, iterations);
 	}
-	
+
+	public void runIterations(List<Point> data, int iter) {
+		record = new Point[iter][];
+		for (int i = 0; i < iter; i++)
+		{
+			record[i] = new Point[nMeans.length];
+			System.arraycopy(nMeans, 0, record[i], 0, nMeans.length);
+			List<Point>[] separated = sortPoints(data);
+			nMeans = getNewCentroids(separated);
+		}
+	}
+
 	/**
 	 * @param data - List of points to serve as the bounds
 	 * @param len - Number of random centroids to generate
@@ -45,7 +59,7 @@ public class KMeans {
 		}
 		return temp;
 	}
-	
+
 	/**
 	 * Non-destructive.
 	 * @param separated - Groups of points
@@ -62,16 +76,13 @@ public class KMeans {
 		}
 		return temp;
 	}
-	
+
 	/**
 	 * Sort the points into groups based on nMeans, the centroids
 	 * @param points - Points to be sorted
 	 * @return The new groups
 	 */
 	private List<Point>[] sortPoints(List<Point> points) {
-		if (nMeans[0] == null) {
-			nMeans = randomNMeans(points);
-		}
 		List<Point>[] temp = (List<Point>[]) new Object[nMeans.length];
 		for (int i = 0; i < nMeans.length; i++) {
 			temp[i] = new ArrayList<Point>();
@@ -90,5 +101,5 @@ public class KMeans {
 		}
 		return temp;
 	}
-	
+
 }

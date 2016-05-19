@@ -6,5 +6,7 @@ public class WeightedPoint extends Point {
 		super(t, d);
 		// TODO Auto-generated constructor stub
 	}
+	
+	
 
 }
