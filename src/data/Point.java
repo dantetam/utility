@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class Point { //T extends Number
 
-	private double[] data;
+	protected double[] data;
 	public int dim;
 	public Type type;
 
@@ -53,17 +53,7 @@ public class Point { //T extends Number
 	 * @param points - A set of points to be combined into an "average"
 	 * @return The new point
 	 */
-	public static Point combine(List<Point> points) {
-		Point avg = new Point(determineNewType(points));
-		avg.changeData(points.get(0).data);
-		for (int j = 0; j < points.size(); j++) {
-			avg = avg.add(points.get(j));
-		}
-		//for (int j = 0; j < nMeans[i].dim; j++) {
-		avg = avg.scale(1D/(double)points.size());
-		//}
-		return avg;
-	}
+	//public abstract Point combine(List<Point> points);
 
 	/**
 	 * Non-destructively adds other to this point
