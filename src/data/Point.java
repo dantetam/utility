@@ -1,6 +1,9 @@
 package data;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Point { //T extends Number
 
@@ -14,6 +17,10 @@ public class Point { //T extends Number
 		dim = data.length;
 	}
 
+	/**
+	 * Provide accessor and mutator to assure correctness of dim
+	 * @param d
+	 */
 	public void changeData(double... d) {
 		data = d;
 		dim = data.length;
@@ -23,12 +30,31 @@ public class Point { //T extends Number
 		return data;
 	}
 	
-	public static Point determineNewType(List<Point> points) {
-		
+	/**
+	 * @param points - A set of points that represent neighbors
+	 * @return A new type that "dominates" the set 
+	 */
+	protected static Type determineNewType(List<Point> points) {
+		Map<Type, Integer> temp = new HashMap<Type, Integer>();
+		return Collections.max(temp.entrySet(), (entry1, entry2) -> entry1.getValue() - entry2.getValue()).getKey();
+		/*Type max = null; int maxVal = -1;
+		for (Point p: points) {
+			int val = temp.getOrDefault(p.type, 0) + 1;
+			temp.put(p.type, val);
+			if (val > maxVal) {
+				maxVal = val;
+				max = p.type;
+			}
+		}
+		return max;*/
 	}
 	
+	/**
+	 * @param points - A set of points to be combined into an "average"
+	 * @return The new point
+	 */
 	public static Point combine(List<Point> points) {
-		Point avg = new Point();
+		Point avg = new Point(determineNewType(points));
 		avg.changeData(points.get(0).data);
 		for (int j = 0; j < points.size(); j++) {
 			avg = avg.add(points.get(j));
@@ -39,6 +65,11 @@ public class Point { //T extends Number
 		return avg;
 	}
 
+	/**
+	 * Non-destructively adds other to this point
+	 * @param other - The point to be added to this point
+	 * @return The new point
+	 */
 	public Point add(Point other) {
 		if (data.length != other.data.length) {
 			throw new RuntimeException("Comparing points of different dimensions");
@@ -70,6 +101,13 @@ public class Point { //T extends Number
 		return Math.sqrt(sum);
 	}
 
+	/**
+	 * 
+	 * @param points - A list of points to be checked
+	 * @return A new double[2]{min, max}, where
+	 * min represents the lowest fields of every point and
+	 * max represents the highest fields.
+	 */
 	public static double[][] minMax(List<Point> points) {
 		if (points.size() == 0) {
 			throw new RuntimeException("Not comparing any points");

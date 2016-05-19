@@ -19,6 +19,14 @@ public interface TwoWayComparator<T> extends Comparator<T> {
 	public int compareY(T a, T b);
 	
 	public T[] createChildren();
+	/**
+	 * @param a - First item T ("this")
+	 * @param b - Second item T ("other")
+	 * @return the default quadrant of b with respect to a,
+	 * where mathematical quadrants are mapped respectively as
+	 * 2 1 --> 0 1
+	 * 3 4 --> 2 3
+	 */
 	public default int getCompareScores(T a, T b) {
 		int dy = compareY(a, b);
 		int dx = compareX(a, b);

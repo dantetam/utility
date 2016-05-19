@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.Point;
+import data.Type;
 
 /**
  * 
@@ -24,12 +25,18 @@ public class KMeans {
 		separatedPoints = sortPoints(data);
 	}
 	
-	private Point[] randomNMeans(List<Point> data) {
-		Point[] temp = new Point[nMeans.length];
+	/**
+	 * @param data - List of points to serve as the bounds
+	 * @param len - Number of random centroids to generate
+	 * @return len number of centroids within the min and max of data
+	 * in each dimension
+	 */
+	private Point[] randomNMeans(List<Point> data, int len) {
+		Point[] temp = new Point[len];
 		double[][] minMax = Point.minMax(data);
 		double[] min = minMax[0], max = minMax[1];
-		for (int i = 0; i < nMeans.length; i++) {
-			temp[i] = new Point();
+		for (int i = 0; i < len; i++) {
+			temp[i] = new Point(Type.randomType());
 			double[] newMean = new double[min.length];
 			for (int j = 0; j < min.length; j++) {
 				newMean[j] = min[j] + Math.random() * (max[j]-min[j]);
@@ -39,6 +46,11 @@ public class KMeans {
 		return temp;
 	}
 	
+	/**
+	 * Non-destructive.
+	 * @param separated - Groups of points
+	 * @return New centroids for every group of points
+	 */
 	private Point[] getNewCentroids(List<Point>[] separated) {
 		if (nMeans[0] == null) {
 			throw new RuntimeException("Should sort points first to generate nMeans");
@@ -51,6 +63,11 @@ public class KMeans {
 		return temp;
 	}
 	
+	/**
+	 * Sort the points into groups based on nMeans, the centroids
+	 * @param points - Points to be sorted
+	 * @return The new groups
+	 */
 	private List<Point>[] sortPoints(List<Point> points) {
 		if (nMeans[0] == null) {
 			nMeans = randomNMeans(points);
