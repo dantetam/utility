@@ -50,7 +50,7 @@ public class KMeans {
 		double[][] minMax = Point.minMax(data);
 		double[] min = minMax[0], max = minMax[1];
 		for (int i = 0; i < len; i++) {
-			temp[i] = new Point(Type.randomType());
+			temp[i] = new Point();
 			double[] newMean = new double[min.length];
 			for (int j = 0; j < min.length; j++) {
 				newMean[j] = min[j] + Math.random() * (max[j]-min[j]);

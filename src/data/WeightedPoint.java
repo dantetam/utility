@@ -12,11 +12,12 @@ public class WeightedPoint extends Point {
 	public MultiType mt;
 	
 	public WeightedPoint(MultiType t, double... d) {
-		super(null, d);
+		super(d);
+		mt = t;
 		// TODO Auto-generated constructor stub
 	}
 	
-	protected static MultiType determineNewType(List<WeightedPoint> points) {
+	protected static MultiType determineNewMultiType(List<WeightedPoint> points) {
 		WeightedPoint base = points.get(0);
 		for (int i = 1; i < points.size(); i++) {
 			if (!base.mt.sameTypes(points.get(i).mt)) {
@@ -57,7 +58,7 @@ public class WeightedPoint extends Point {
 	}
 	
 	public static WeightedPoint combine(List<WeightedPoint> points) {
-		Point avg = new WeightedPoint(determineNewType(points));
+		Point avg = new WeightedPoint(determineNewMultiType(points));
 		avg.changeData(points.get(0).data);
 		for (int j = 0; j < points.size(); j++) {
 			avg = avg.add(points.get(j));

@@ -4,8 +4,11 @@ import java.util.List;
 
 public class DiscretePoint extends Point {
 
+	public Type type;
+	
 	public DiscretePoint(Type t, double... d) {
-		super(t, d);
+		super(d);
+		type = t;
 		// TODO Auto-generated constructor stub
 	}
 	

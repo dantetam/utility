@@ -9,10 +9,9 @@ public class Point { //T extends Number
 
 	protected double[] data;
 	public int dim;
-	public Type type;
 
-	public Point(Type t, double... d) {
-		type = t;
+	public Point(double... d) {
+		//type = t;
 		data = d;
 		dim = data.length;
 	}
@@ -53,7 +52,17 @@ public class Point { //T extends Number
 	 * @param points - A set of points to be combined into an "average"
 	 * @return The new point
 	 */
-	//public abstract Point combine(List<Point> points);
+	public static Point combinePoints(List<Point> points) {
+		Point avg = new Point();
+		avg.changeData(points.get(0).data);
+		for (int j = 0; j < points.size(); j++) {
+			avg = avg.add(points.get(j));
+		}
+		//for (int j = 0; j < nMeans[i].dim; j++) {
+		avg = avg.scale(1D/(double)points.size());
+		//}
+		return avg;
+	}
 
 	/**
 	 * Non-destructively adds other to this point
@@ -68,15 +77,19 @@ public class Point { //T extends Number
 		for (int i = 0; i < data.length; i++) {
 			temp[i] = data[i] + other.data[i];
 		}
-		return new Point(type, temp);
+		return new Point(temp);
 	}
 
 	public Point scale(double factor) {
-		Point temp = new Point(type, this.data);
+		Point temp = new Point(this.data);
 		for (int i = 0; i < temp.data.length; i++) {
 			temp.data[i] *= factor;
 		}
 		return temp;
+	}
+	
+	public Point avg(Point other) {
+		return this.add(other).scale(0.5D);
 	}
 
 	public double dist(Point other) {
