@@ -5,7 +5,7 @@ import java.util.List;
 public class MultiType {
 
 	public List<Type> types;
-	public List<Double> weights;
+	public List<Double> weights; //Ideally should add up to 1
 	
 	public MultiType(List<Type> t, List<Double> w) {
 		if (t.size() != w.size()) {
