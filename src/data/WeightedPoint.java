@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class WeightedPoint extends Point {
 
-	public MultiType types;
+	public MultiType mt;
 	
 	public WeightedPoint(MultiType t, double... d) {
 		super(null, d);
@@ -15,8 +15,13 @@ public class WeightedPoint extends Point {
 	}
 	
 	protected static MultiType determineNewType(List<WeightedPoint> points) {
-		Map<Type, Integer> temp = new HashMap<Type, Integer>();
-		return Collections.max(temp.entrySet(), (entry1, entry2) -> entry1.getValue() - entry2.getValue()).getKey();
+		WeightedPoint base = points.get(0);
+		for (int i = 1; i < points.size(); i++) {
+			if (!base.mt.sameTypes(points.get(i).mt)) {
+				throw new RuntimeException("Cannot compare WeightedPoint of different types");
+			}
+		}
+		
 		/*Type max = null; int maxVal = -1;
 		for (Point p: points) {
 			int val = temp.getOrDefault(p.type, 0) + 1;
