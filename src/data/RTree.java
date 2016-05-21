@@ -5,7 +5,7 @@ public class RTree<T extends Point> {
 	private RTreeBox<T> root;
 	
 	public RTree() {
-		root = new RTreeBox();
+		root = new RTreeBox(null); //Null to signify root
 	}
 	
 	/**

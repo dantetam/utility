@@ -113,7 +113,7 @@ public class Point { //T extends Number
 	 */
 	public double boxDist(Point other) {
 		if (data.length != other.data.length) {
-			throw new RuntimeException("Comparing points of different dimensions");
+			throw new IllegalArgumentException("Comparing points of different dimensions");
 		}
 		double product = 1;
 		for (int i = 0; i < data.length; i++) {
@@ -155,6 +155,17 @@ public class Point { //T extends Number
 			}
 		}
 		return new double[][]{min, max};
+	}
+	
+	/**
+	 * Same as min-max but returns in a convenient point form
+	 * @param points - Points of the calculated bound
+	 * @return an array of 2 points containing absolute positions
+	 * of the upper left and lower right corners of the bound
+	 */
+	public static Point[] findBounds(List<Point> points) {
+		double[][] temp = minMax(points);
+		return new Point[]{new Point(temp[0]), new Point(temp[1])};
 	}
 
 }
