@@ -5,7 +5,7 @@ import java.util.List;
 
 public class RTreeBox<T extends Point> extends Box {
 
-	public static int CAPACITY = 5;
+	public static int MAX_CAPACITY = 4;
 	public List<RTreeBox> children;
 	public List<T> data;
 	
