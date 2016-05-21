@@ -103,6 +103,25 @@ public class Point { //T extends Number
 		}
 		return Math.sqrt(sum);
 	}
+	
+	/**
+	 * Where this and other are N-dimensional points, 
+	 * return the area/volume within the N-dimensional solid defined
+	 * by this point and other.
+	 * @param other - The other point to be compared to
+	 * @return a "volume"
+	 */
+	public double boxDist(Point other) {
+		if (data.length != other.data.length) {
+			throw new RuntimeException("Comparing points of different dimensions");
+		}
+		double product = 1;
+		for (int i = 0; i < data.length; i++) {
+			double t = data[i] - other.data[i];
+			product *= Math.abs(t);
+		}
+		return product;
+	}
 
 	/**
 	 * 
