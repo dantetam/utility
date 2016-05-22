@@ -18,7 +18,7 @@ public class RTreeBox<T extends Point> extends Box {
 	
 	/**
 	 * Insert directly into this ("this" being the child)
-	 * Split if #children > RTreeBox.MAX_CAPACITY
+	 * Split if #children > RTreeBox.MAX_CAPACITY (start a split chain)
 	 * @param item - The item to be inserted
 	 */
 	public void insertMaybeSplit(T item) {
@@ -33,6 +33,7 @@ public class RTreeBox<T extends Point> extends Box {
 	 * Insert into a new child of this RTreeBox, provided there is room
 	 * Otherwise, insert into the best child, using the "quadratic" scheme
 	 * (minimize gain in area by inserting the child and seeing the new bound).
+	 * Start a split chain if necessary.
 	 * @param item - The item to be inserted
 	 */
 	public void insertMaybeSplitNew(T item) {
@@ -53,7 +54,7 @@ public class RTreeBox<T extends Point> extends Box {
 				bounds = Point.findBounds(possibleBounds);
 				double areaChange = bounds[0].boxDist(bounds[1]) - areaBefore;
 				
-				if (preferred == null || areaChange < minArea) {
+				if (preferred == null || areaChange < minAreaChange) {
 					preferred = child;
 					minAreaChange = areaChange;
 				}
@@ -62,7 +63,16 @@ public class RTreeBox<T extends Point> extends Box {
 		}
 	}
 	
-	private void split() {
+	/**
+	 * Start a split chain? (Split this into two children of this parent)
+	 * Or just split? (Create two new children under this)
+	 * We'll go with the less difficult scheme for now.
+	 * This method uses a modified quadratic scheme:
+	 * insert one element into a box, then insert the next one that minimizes
+	 * area gained. Repeat until old_size/2 items have been inserted, truncating
+	 * (so really, MAX_CAPACITY/2). Put the rest of the items into a new child.
+	 */
+	private void split() { 
 		
 	}
 	
