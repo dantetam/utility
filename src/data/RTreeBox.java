@@ -49,8 +49,8 @@ public class RTreeBox<T extends Point> extends Box {
 				possibleBounds.add(child.topLeft.add(child.bounds));
 				Point[] bounds = Point.findBounds(possibleBounds);
 				double areaBefore = bounds[0].boxDist(bounds[1]);
-				possibleBounds.add(item);
 				
+				possibleBounds.add(item);
 				bounds = Point.findBounds(possibleBounds);
 				double areaChange = bounds[0].boxDist(bounds[1]) - areaBefore;
 				
@@ -73,7 +73,37 @@ public class RTreeBox<T extends Point> extends Box {
 	 * (so really, MAX_CAPACITY/2). Put the rest of the items into a new child.
 	 */
 	private void split() { 
+		RTreeBox child1 = new RTreeBox(this), child2 = new RTreeBox(this);
+		T first = data.remove((int)(Math.random()*data.size()));
 		
+		List<Point> possibleBounds = new ArrayList<Point>();
+		possibleBounds.add(first);
+		
+		while (possibleBounds.size() < MAX_CAPACITY/2) {
+			Point[] bounds = Point.findBounds(possibleBounds);
+			double areaBefore = bounds[0].boxDist(bounds[1]);
+			double minAreaChange = 0; int minIndex = -1;
+			for (int i = 0; i < data.size(); i++) {
+				possibleBounds.add(data.get(i));
+				Point[] temp = Point.findBounds(possibleBounds);
+				double areaChange = bounds[0].boxDist(bounds[1]) - areaBefore;
+				if (minIndex == -1 || areaChange < minAreaChange) {
+					minIndex = i;
+					minAreaChange = areaChange;
+				}
+				possibleBounds.remove(data.get(i));
+			}
+			possibleBounds.add(data.remove(minIndex));
+		}
+		
+		child1.data = new ArrayList<Point>(possibleBounds);
+		child1.extendToFitBounds();
+		
+		child2.data = new ArrayList<Point>(data);
+		child2.extendToFitBounds();
+		
+		data.clear();
+		children.add(child1); children.add(child2);
 	}
 	
 	/**

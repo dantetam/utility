@@ -36,4 +36,14 @@ public class Box {
 		return true;
 	}
 	
+	public int hashCode() {
+		return topLeft.hashCode() + bounds.hashCode();
+	}
+	
+	public boolean equals(Object other) {
+		if (!(other instanceof Box)) return false;
+		Box b = (Box) other;
+		return topLeft.equals(b.topLeft) && bounds.equals(b.bounds);
+	}
+	
 }

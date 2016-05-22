@@ -167,5 +167,14 @@ public class Point { //T extends Number
 		double[][] temp = minMax(points);
 		return new Point[]{new Point(temp[0]), new Point(temp[1])};
 	}
+	
+	public int hashCode() {
+		int sum = 0;
+		for (int i = 0; i < data.length; i++) {
+			sum += data[i];
+			sum %= 6700417;
+		}
+		return sum;
+	}
 
 }
